@@ -28,7 +28,7 @@ const AuctionContainer = () => {
       style={{
         backgroundColor: " #F3F1F1",
         padding: "60px",
-        height: "100vh",
+        minheight: "100vh",
       }}
     >
       <h3
