@@ -6,8 +6,10 @@ import Styles from "./auctioncontainer.module.scss";
 
 const AuctionContainer = () => {
   const [information, setInformation] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(
         "http://staging.auction-service.beed.ng/api/v1/auction?limit=5&skip=0&state=pending"
@@ -16,14 +18,38 @@ const AuctionContainer = () => {
         const data = res.data;
         const info = data.data.items;
         setInformation([...info]);
-      });
+        setLoading(false);
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   return (
-    <div className={Styles.container}>
-      {information.map((eachInfo) => (
-        <Auction eachInfo={eachInfo} key={eachInfo._id} />
-      ))}
+    <div
+      style={{
+        backgroundColor: " #F3F1F1",
+        padding: "60px",
+        height: "100vh",
+      }}
+    >
+      <h3
+        style={{
+          textAlign: "center",
+        }}
+      >
+        Auctions
+      </h3>
+
+      <div className={Styles.container}>
+        {loading ? (
+          "Loading..."
+        ) : (
+          <>
+            {information.map((eachInfo) => (
+              <Auction eachInfo={eachInfo} key={eachInfo._id} />
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 };
