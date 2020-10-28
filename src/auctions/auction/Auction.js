@@ -1,27 +1,26 @@
 import React from "react";
 import Styles from "./auction.module.scss";
-import Countdown from "react-countdown";
+import DateCountdown from "react-date-countdown-timer";
 
 const Auction = ({ eachInfo }) => {
-  const today = new Date(),
-    date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
+  // const renderer = ({ hours, minutes, seconds, completed }) => {
+  //   if (completed) {
+  //     return <b>Auction Closed</b>;
+  //   } else {
+  //     return (
+  //       <b style={{ fontSize: "14px" }}>
+  //         {`${hours} hrs: ${minutes} min: ${seconds} secs`} left
+  //       </b>
+  //     );
+  //   }
+  // };
 
-  const renderer = ({ hours, minutes, seconds, completed }) => {
-    if (completed) {
-      return <b>Auction Closed</b>;
-    } else {
-      return (
-        <b style={{ fontSize: "14px" }}>
-          {`${hours} hrs: ${minutes} min: ${seconds} secs`} left
-        </b>
-      );
-    }
-  };
+  const countDownDate = new Date(eachInfo.start_time);
+
+  const timeDifference =
+    new Date().getTime() - new Date(eachInfo.start_time).getTime();
+
+  console.log(timeDifference);
 
   return (
     <div>
@@ -33,10 +32,21 @@ const Auction = ({ eachInfo }) => {
             className={Styles.auction_image}
           />
           <p>
-            {date > new Date(eachInfo.start_time).toDateString() ? (
+            {timeDifference > new Date(eachInfo.start_time).toDateString() ? (
               <b>Auction Closed</b>
             ) : (
-              <Countdown renderer={renderer} date={eachInfo.start_time} />
+              <DateCountdown
+                dateTo={countDownDate.toISOString()}
+                locales={["year", "month", "day", "hr", "min", "sec"]}
+                locales_plural={[
+                  "years",
+                  "months",
+                  "days",
+                  "hrs",
+                  "mins",
+                  "secs",
+                ]}
+              />
             )}
           </p>
         </div>
