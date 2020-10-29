@@ -1,26 +1,33 @@
 import React from "react";
 import Styles from "./auction.module.scss";
-import DateCountdown from "react-date-countdown-timer";
+import Countdown from "react-countdown";
 
 const Auction = ({ eachInfo }) => {
-  // const renderer = ({ hours, minutes, seconds, completed }) => {
-  //   if (completed) {
-  //     return <b>Auction Closed</b>;
-  //   } else {
-  //     return (
-  //       <b style={{ fontSize: "14px" }}>
-  //         {`${hours} hrs: ${minutes} min: ${seconds} secs`} left
-  //       </b>
-  //     );
-  //   }
-  // };
+  const today = new Date(),
+    date =
+      today.getFullYear() +
+      "-" +
+      (today.getMonth() + 1) +
+      "-" +
+      today.getDate();
+
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      return <b>Auction Closed</b>;
+    } else {
+      return (
+        <b style={{ fontSize: "14px" }}>
+          {`${hours} hrs: ${minutes} min: ${seconds} secs`} left
+        </b>
+      );
+    }
+  };
 
   const countDownDate = new Date(eachInfo.start_time);
 
-  const timeDifference =
-    new Date().getTime() - new Date(eachInfo.start_time).getTime();
+  const timeDifference = countDownDate.getTime() - today.getTime();
 
-  console.log(timeDifference);
+  console.log(countDownDate);
 
   return (
     <div>
@@ -32,20 +39,12 @@ const Auction = ({ eachInfo }) => {
             className={Styles.auction_image}
           />
           <p>
-            {timeDifference > new Date(eachInfo.start_time).toDateString() ? (
+            {date > new Date(eachInfo.start_time).toDateString() ? (
               <b>Auction Closed</b>
             ) : (
-              <DateCountdown
-                dateTo={countDownDate.toISOString()}
-                locales={["year", "month", "day", "hr", "min", "sec"]}
-                locales_plural={[
-                  "years",
-                  "months",
-                  "days",
-                  "hrs",
-                  "mins",
-                  "secs",
-                ]}
+              <Countdown
+                renderer={renderer}
+                date={Date.now() + timeDifference}
               />
             )}
           </p>

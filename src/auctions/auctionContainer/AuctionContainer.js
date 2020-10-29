@@ -20,7 +20,10 @@ const AuctionContainer = () => {
         setInformation([...info]);
         setLoading(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setLoading(false);
+        console.log(error);
+      });
   }, []);
 
   return (
@@ -41,7 +44,7 @@ const AuctionContainer = () => {
 
       <div className={Styles.container}>
         {loading ? (
-          "Loading..."
+          <p>Loading...</p>
         ) : (
           <>
             {information.map((eachInfo) => (
